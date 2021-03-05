@@ -1,0 +1,15 @@
+{% extends 'eb_tests/base/base.html' %}
+
+
+
+{% block content %}
+
+{% include 'instalike/user_info.html' %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Изменить данные</button>
+</form>
+
+{% endblock %}
