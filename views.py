@@ -65,3 +65,5 @@ class ChangePasswordView(PasswordChangeView):
 
 class ChangePasswordDoneView(PasswordChangeDoneView):
     template_name = 'eb_tests/password_change_done.html'
+
+

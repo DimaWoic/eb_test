@@ -2,7 +2,7 @@ from django.db import models
 
 
 class TestName(models.Model):
-    name = models.CharField(verbose_name='название теста')
+    name = models.CharField(verbose_name='название теста', max_length=500)
 
     class Meta:
         verbose_name = 'название теста'
@@ -14,7 +14,7 @@ class TestName(models.Model):
 
 class EbGroup(models.Model):
     name = models.CharField(max_length=300, verbose_name='наименование')
-    test_name = models.ForeignKey(max_length='название теста', on_delete=models.CASCADE)
+    test_name = models.ForeignKey(TestName, verbose_name='название теста', on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'группа по электробезопасности'
@@ -26,7 +26,9 @@ class EbGroup(models.Model):
 
 class Ticket(models.Model):
     name = models.CharField(max_length=10, verbose_name='номер билета', unique=True)
-    eb_group = models.ForeignKey(on_delete=models.CASCADE, verbose_name='группа по электробезопасности')
+    eb_group = models.ForeignKey(EbGroup, on_delete=models.CASCADE, verbose_name='группа по электробезопасности')
+    answers_true = models.DecimalField(max_digits=1, decimal_places=0, verbose_name='правильный ответ')
+    answers_false = models.DecimalField(max_digits=1, decimal_places=0, verbose_name='неправильный ответ')
 
     class Meta:
         verbose_name = 'номер билета'
@@ -38,7 +40,7 @@ class Ticket(models.Model):
 
 class Question(models.Model):
     text = models.TextField(verbose_name='текст вопроса', max_length=600)
-    ticket = models.ForeignKey(verbose_name='номер билета', on_delete=models.CASCADE)
+    ticket = models.ForeignKey(Ticket, verbose_name='номер билета', on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'вопрос'
@@ -48,27 +50,14 @@ class Question(models.Model):
         return self.text
 
 
-class Commssion(models.Model):
-    name = models.CharField(verbose_name='центральная комиссия')
+class Answers(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='вопрос')
+    text = models.TextField(verbose_name='текст ответа', unique=True)
+    truthy = models.BooleanField(verbose_name='правильность ответа')
 
     class Meta:
-        verbose_name = 'центральная комиссия'
-        verbose_name_plural = 'центральной комиссии'
+        verbose_name = 'ответ'
+        verbose_name_plural = 'ответы'
 
     def __str__(self):
-        return self.name
-
-
-class Commssion_member(models.Model):
-    name = models.CharField(max_length=50, verbose_name='имя')
-    m_name = models.CharField(max_length=50, verbose_name='отчество')
-    surname = models.CharField(max_length=50, verbose_name='Фамилия')
-    eb_group = models.ForeignKey(EbGroup, max_length=100, verbose_name='группа электробезопасности',
-                                 on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = 'Коммиссия'
-        verbose_name_plural = 'Коммиссии'
-
-    def __str__(self):
-        return self.surname
+        return self.text
