@@ -15,7 +15,7 @@ class EbGroupAdmin(admin.ModelAdmin):
 
 
 class TicketAdmin(admin.ModelAdmin):
-    list_display = ['name', 'eb_group', 'answers_true', 'answers_false']
+    list_display = ['name', 'eb_group']
 
 
 class QuestionAdmin(admin.ModelAdmin):

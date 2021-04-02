@@ -27,8 +27,8 @@ class EbGroup(models.Model):
 class Ticket(models.Model):
     name = models.CharField(max_length=10, verbose_name='номер билета', unique=True)
     eb_group = models.ForeignKey(EbGroup, on_delete=models.CASCADE, verbose_name='группа по электробезопасности')
-    answers_true = models.DecimalField(max_digits=1, decimal_places=0, verbose_name='правильный ответ')
-    answers_false = models.DecimalField(max_digits=1, decimal_places=0, verbose_name='неправильный ответ')
+    answers_true = models.DecimalField(max_digits=1, decimal_places=0, verbose_name='правильный ответ', default=0)
+    answers_false = models.DecimalField(max_digits=1, decimal_places=0, verbose_name='неправильный ответ', default=0)
 
     class Meta:
         verbose_name = 'номер билета'

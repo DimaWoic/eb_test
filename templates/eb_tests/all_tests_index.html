@@ -1,0 +1,13 @@
+{% extends 'eb_tests/base/base.html' %}
+
+{% block content %}
+
+<ul>
+    {% if tests %}
+        {% for test in tests %}
+    <li><a href="{% url 'eb_groups' test.pk %}">{{ test.name }}</a></li>
+        {% endfor %}
+    {% endif %}
+</ul>
+
+{% endblock %}

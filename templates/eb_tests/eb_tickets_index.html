@@ -1,0 +1,13 @@
+{% extends 'eb_tests/base/base.html' %}
+
+{% block content %}
+
+<ul>
+    {% if tickets %}
+        {% for ticket in tickets %}
+    <li><a >{{ ticket.name }}</a></li>
+        {% endfor %}
+    {% endif %}
+</ul>
+
+{% endblock %}

@@ -6,6 +6,7 @@ from . import forms
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.models import User
+from .models import TestName, Ticket, Question, EbGroup, Answers
 
 
 def main_page(request):
@@ -67,3 +68,36 @@ class ChangePasswordDoneView(PasswordChangeDoneView):
     template_name = 'eb_tests/password_change_done.html'
 
 
+class AllTestsView(ListView):
+    queryset = TestName.objects.all()
+    context_object_name = 'tests'
+    template_name = 'eb_tests/all_tests_index.html'
+    template_name_suffix = '_index'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        print(context)
+        return context
+
+
+class EbGroupView(ListView):
+    context_object_name = 'groups'
+    template_name = 'eb_tests/eb_groups_index.html'
+    template_name_suffix = '_index'
+
+    def get_queryset(self):
+        test_name = TestName.objects.get(pk=self.kwargs['pk'])
+        queryset = EbGroup.objects.filter(test_name__name=test_name)
+        return queryset
+
+
+class TestTicketsView(ListView):
+    context_object_name = 'tickets'
+    template_name = 'eb_tests/eb_tickets_index.html'
+    template_name_suffix = '_index'
+
+    def get_queryset(self):
+        print(self.kwargs)
+        eb_group = EbGroup.objects.get(pk=self.kwargs['pk'])
+        queryset = Ticket.objects.filter(eb_group__name=eb_group)
+        return queryset
